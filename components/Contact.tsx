@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Phone, Mail, Globe, ArrowRight, ChevronDown, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, ArrowRight, ChevronDown, CheckCircle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ContactProps {
@@ -17,6 +17,7 @@ const Contact: React.FC<ContactProps> = ({ preSelectedTourType }) => {
     phone: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     if (preSelectedTourType) {
@@ -28,38 +29,38 @@ const Contact: React.FC<ContactProps> = ({ preSelectedTourType }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Construct Email Subject & Body
-    const subject = `New Inquiry has been submitted: ${formData.name} - Callback Request`;
-    
-    const body = `Dear Team,
+    setIsSending(true);
 
-A new inquiry (Callback Request) has been submitted via the Contact Us page. Please contact the client with the provided details.
+    try {
+      // Use FormSubmit.co for direct AJAX email sending
+      const response = await fetch("https://formsubmit.co/ajax/Info@eleganttours.co.in", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          ...formData,
+          _subject: `New Contact Form Inquiry: ${formData.name}`,
+          _template: "table", // Sends data in a clean table format
+          _captcha: "false"   // Disable captcha redirect
+        })
+      });
 
-Client Details:
---------------------------------------------------
-Name: ${formData.name}
-Phone: ${formData.phone}
-Email: ${formData.email}
---------------------------------------------------
-
-Trip Requirements:
---------------------------------------------------
-Preferred Date: ${formData.date}
-Tour Type: ${formData.tourType}
-Accommodation: ${formData.accommodation === 'ac' ? 'AC Room' : 'Non-AC Room'}
-Number of Guests: ${formData.guests}
---------------------------------------------------
-
-Please respond to this inquiry as soon as possible.`;
-
-    const mailtoLink = `mailto:Info@eleganttours.co.in?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
-    
-    // Show success message
-    setIsSubmitted(true);
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        console.error("Form submission failed");
+        alert("Something went wrong. Please try again or contact us on WhatsApp.");
+      }
+    } catch (error) {
+      console.error("Error submitting form", error);
+      alert("Network error. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -269,9 +270,22 @@ Please respond to this inquiry as soon as possible.`;
                         </div>
                       </div>
 
-                      <button type="submit" className="group w-full bg-gradient-to-r from-slate-900 to-nature-900 hover:from-emerald-700 hover:to-nature-800 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 mt-6">
-                        <span className="text-lg tracking-wide">Request Callback</span>
-                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                      <button 
+                        type="submit" 
+                        disabled={isSending}
+                        className="group w-full bg-gradient-to-r from-slate-900 to-nature-900 hover:from-emerald-700 hover:to-nature-800 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
+                      >
+                         {isSending ? (
+                            <>
+                              <Loader2 className="animate-spin" size={20} />
+                              <span className="text-lg tracking-wide">Sending...</span>
+                            </>
+                          ) : (
+                            <>
+                                <span className="text-lg tracking-wide">Request Callback</span>
+                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            </>
+                          )}
                       </button>
                     </form>
                 </>

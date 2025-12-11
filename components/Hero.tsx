@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Calendar, Users, Clock, Mail, User, Phone, Home, CheckCircle } from 'lucide-react';
+import { MessageCircle, Calendar, Users, Clock, Mail, User, Phone, Home, CheckCircle, Loader2 } from 'lucide-react';
 
 interface HeroProps {
   onCheckPackages: () => void;
@@ -10,6 +10,7 @@ const Hero: React.FC<HeroProps> = ({ onCheckPackages }) => {
   const [showForm, setShowForm] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -47,41 +48,39 @@ const Hero: React.FC<HeroProps> = ({ onCheckPackages }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Construct Email Subject & Body
-    const subject = `New Inquiry has been submitted: ${formData.name} - Package Details`;
-    
-    const body = `Dear Team,
+    setIsSending(true);
 
-A new inquiry has been submitted via the website Hero form. Please contact the client with the provided details.
+    try {
+      // Use FormSubmit.co for direct AJAX email sending
+      const response = await fetch("https://formsubmit.co/ajax/Info@eleganttours.co.in", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          ...formData,
+          _subject: `New Hero Form Inquiry: ${formData.name}`,
+          _template: "table", // Sends data in a clean table format
+          _captcha: "false"   // Disable captcha redirect
+        })
+      });
 
-Client Details:
---------------------------------------------------
-Name: ${formData.name}
-Phone: ${formData.phone}
-Email: ${formData.email}
---------------------------------------------------
-
-Trip Requirements:
---------------------------------------------------
-Preferred Date: ${formData.date}
-Tour Type: ${formData.tourType}
-Accommodation: ${formData.accommodation === 'ac' ? 'AC Room' : 'Non-AC Room'}
-Number of Guests: ${formData.guests}
---------------------------------------------------
-
-Please respond to this inquiry as soon as possible.`;
-
-    const mailtoLink = `mailto:Info@eleganttours.co.in?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
-    
-    // Set submitted state to true to show success message
-    setIsSubmitted(true);
-    
-    // Optional: Trigger navigation callback if needed, but keeping user here to see success message is better UX
-    // onCheckPackages(); 
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        // Fallback or error handling if needed, but usually 200 OK
+        console.error("Form submission failed");
+        alert("Something went wrong. Please try again or contact us on WhatsApp.");
+      }
+    } catch (error) {
+      console.error("Error submitting form", error);
+      alert("Network error. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -287,8 +286,19 @@ Please respond to this inquiry as soon as possible.`;
                           </div>
                         </div>
 
-                        <button type="submit" className="w-full bg-gradient-to-r from-slate-900 to-slate-800 hover:from-emerald-800 hover:to-emerald-700 text-white font-bold py-4 rounded-xl mt-6 transition-all shadow-lg hover:shadow-xl text-lg tracking-wide transform hover:-translate-y-0.5">
-                          Check Our Package
+                        <button 
+                          type="submit" 
+                          disabled={isSending}
+                          className="w-full bg-gradient-to-r from-slate-900 to-slate-800 hover:from-emerald-800 hover:to-emerald-700 text-white font-bold py-4 rounded-xl mt-6 transition-all shadow-lg hover:shadow-xl text-lg tracking-wide transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                        >
+                          {isSending ? (
+                            <>
+                              <Loader2 className="animate-spin" size={24} />
+                              Sending...
+                            </>
+                          ) : (
+                            "Check Our Package"
+                          )}
                         </button>
 
                         {/* WhatsApp Button */}
