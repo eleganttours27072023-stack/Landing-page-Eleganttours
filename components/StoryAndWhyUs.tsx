@@ -167,7 +167,7 @@ const StoryAndWhyUs: React.FC = () => {
                 { 
                   icon: Music,
                   title: "Deep Cultural Immersion", 
-                  desc: "Beyond sightseeing—engage with local folklore, tribal dance, and the living heritage of the delta." 
+                  desc: "Beyond sightseeing—engage with local folklore, folk dance, and the living heritage of the delta." 
                 }
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-5 group p-5 rounded-2xl bg-white/50 border border-white/60 hover:bg-[#f0fdf4] hover:border-emerald-100 hover:shadow-lg transition-all duration-300 cursor-default">
@@ -194,10 +194,10 @@ const StoryAndWhyUs: React.FC = () => {
               
               <ul className="space-y-6 relative z-10">
                 {[
-                  { title: "Early Bird Discount:", desc: "Flat 15% off for priority bookings." },
-                  { title: "Priority Room Selection:", desc: "Best River-View Cottages guaranteed." },
-                  { title: "Exclusive Experience:", desc: "Complimentary private bonfire & tribal dance for groups > 4." },
-                  { title: "Flexible Dates:", desc: "One-time free rescheduling." }
+                  { title: "Early Access", desc: "Before public launch." },
+                  { title: "Locked-in Pricing", desc: "Skip future rate hikes." },
+                  { title: "Priority Selection", desc: "First choice of AC or Non-AC resort." },
+                  { title: "No Payment Required Now", desc: "Just reserve your privilege." }
                 ].map((benefit, idx) => (
                   <li key={idx} className="flex items-start gap-4 group/list">
                     <div className="mt-1 bg-emerald-500/10 p-1.5 rounded-lg text-emerald-400 border border-emerald-500/20 shrink-0 group-hover/list:bg-emerald-500 group-hover/list:text-white transition-colors">

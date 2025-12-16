@@ -21,7 +21,7 @@ const packages: TourPackage[] = [
     title: 'Classic Gateway',
     duration: '1 Night 2 Days',
     priceLabel: 'Best Seller',
-    image: 'https://eleganttours.co.in/wp-content/uploads/2025/12/IMG20241109145719-scaled.jpg', 
+    image: 'https://eleganttours.co.in/wp-content/uploads/2025/12/SUNDARBANS-HOTEL1-1.jpeg', 
     features: [
       { name: 'Resort Stay (AC/Non-AC)', description: 'Clean, comfortable AC or Non-AC rooms in the heart of nature.' },
       { name: '5 Meals Included', description: 'Full board dining: Breakfast, Lunch, Snacks, and Dinner included.' },
@@ -49,7 +49,7 @@ const packages: TourPackage[] = [
     title: 'Customized Expedition',
     duration: 'Flexible',
     priceLabel: 'Premium',
-    image: 'https://eleganttours.co.in/wp-content/uploads/2025/12/IMG20241109145430.jpg', 
+    image: 'https://eleganttours.co.in/wp-content/uploads/2025/12/SUNDARBANS-HOTEL1-3.jpeg', 
     features: [
       { name: 'We Make It For You', description: 'A completely personalized itinerary crafted from scratch to suit your pace.' },
       { name: 'Group or Individual', description: 'Perfect for large private groups, families, or solo travelers seeking solitude.' },
