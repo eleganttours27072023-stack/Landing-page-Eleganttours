@@ -26,7 +26,7 @@ const packages: TourPackage[] = [
       { name: 'Resort Stay (AC/Non-AC)', description: 'Clean, comfortable AC or Non-AC rooms in the heart of nature.' },
       { name: '5 Meals Included', description: 'Full board dining: Breakfast, Lunch, Snacks, and Dinner included.' },
       { name: 'Sunset Cruise', description: 'Experience the mesmerizing colors of the setting sun on the river.' },
-      { name: 'Tribal Dance Program', description: 'Enjoy a cultural evening with local folk dance performance.' },
+      { name: 'Folk Dance Program', description: 'Enjoy a cultural evening with local folk dance performance.' },
       { name: 'Kolkata to Kolkata Transport', description: 'Hassle-free pick up and drop from Kolkata city points.' }
     ]
   },
